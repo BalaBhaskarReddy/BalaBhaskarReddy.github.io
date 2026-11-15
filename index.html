@@ -1,8 +1,584 @@
-<html>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>Sample Page</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111827">
+
+  <title>The First Principles Library</title>
+
+  <meta name="description"
+        content="A growing collection of books on computer science, engineering, programming and technology, written from first principles.">
+
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111c30;
+      --surface-hover: #192840;
+      --border: #26364d;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #93c5fd;
+      --accent-strong: #60a5fa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+                   "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    /* Header */
+
+    header {
+      padding: 55px 0 40px;
+      border-bottom: 1px solid var(--border);
+      background:
+        radial-gradient(ellipse at top left,
+        #1d3557 0%, transparent 55%);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #1e3a5f;
+      color: var(--accent);
+      font-size: 25px;
+    }
+
+    .brand-name {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.15;
+      letter-spacing: -1.5px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      max-width: 650px;
+      color: #b7c5d8;
+      font-size: 17px;
+    }
+
+    .tagline {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 1px;
+    }
+
+    /* Main */
+
+    main {
+      padding: 42px 0 70px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2 {
+      font-size: 23px;
+      color: #fff;
+    }
+
+    .book-count {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* Search */
+
+    .search-box {
+      width: 100%;
+      padding: 15px 18px;
+      margin-bottom: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      color: white;
+      font-size: 15px;
+    }
+
+    .search-box:focus {
+      border-color: var(--accent-strong);
+    }
+
+    .search-box::placeholder {
+      color: #64748b;
+    }
+
+    /* Filters */
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .filter {
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 7px 16px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    .filter:hover,
+    .filter.active {
+      background: #1e3a5f;
+      color: var(--accent);
+      border-color: #315b89;
+    }
+
+    /* Book Grid */
+
+    .books {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(270px, 1fr));
+      gap: 20px;
+    }
+
+    .book-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      min-height: 235px;
+      transition: transform 0.2s, background 0.2s,
+                  border-color 0.2s;
+    }
+
+    .book-card:hover {
+      transform: translateY(-4px);
+      background: var(--surface-hover);
+      border-color: #42648b;
+    }
+
+    .book-code {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: var(--accent);
+      margin-bottom: 17px;
+    }
+
+    .book-category {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: #7dd3fc;
+      margin-bottom: 8px;
+    }
+
+    .book-card h3 {
+      font-size: 19px;
+      color: #fff;
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+
+    .book-card p {
+      color: var(--muted);
+      font-size: 13px;
+      flex-grow: 1;
+      margin-bottom: 22px;
+    }
+
+    .read-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .read-link:hover {
+      color: #fff;
+    }
+
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--muted);
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 30px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: var(--accent);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 38px 0 30px;
+      }
+
+      .books {
+        grid-template-columns: 1fr;
+      }
+
+      .book-card {
+        min-height: 210px;
+      }
+
+      .section-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
+
 <body>
-Sample page . no animations.
+
+  <!-- Header -->
+
+  <header>
+    <div class="container">
+
+      <div class="brand">
+        <div class="brand-icon">⌘</div>
+        <div class="brand-name">
+          The First Principles Library
+        </div>
+      </div>
+
+      <h1>Understand deeply.<br>Build from first principles.</h1>
+
+      <p class="subtitle">
+        A growing collection of books exploring computer science,
+        engineering, programming and technology — from fundamental
+        concepts to advanced systems.
+      </p>
+
+      <div class="tagline">
+        INDEPENDENT LEARNING · DEEP UNDERSTANDING · ENGINEERING
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Library -->
+
+  <main>
+    <div class="container">
+
+      <div class="section-heading">
+        <h2>The Library</h2>
+        <span class="book-count" id="bookCount">
+          6 books
+        </span>
+      </div>
+
+      <!-- Search -->
+
+      <input
+        type="search"
+        id="searchInput"
+        class="search-box"
+        placeholder="Search books, topics or technologies..."
+        aria-label="Search books"
+      >
+
+      <!-- Categories -->
+
+      <div class="filters">
+        <button class="filter active" data-category="all">
+          All Books
+        </button>
+        <button class="filter" data-category="programming">
+          Programming
+        </button>
+        <button class="filter" data-category="systems">
+          Systems
+        </button>
+        <button class="filter" data-category="security">
+          Security
+        </button>
+        <button class="filter" data-category="networking">
+          Networking
+        </button>
+      </div>
+
+      <!-- Book Cards -->
+
+      <div class="books" id="booksGrid">
+
+        <article class="book-card"
+          data-category="programming"
+          data-search="dsa data structures algorithms computer science complexity">
+
+          <div class="book-code">DSA</div>
+          <div class="book-category">Computer Science</div>
+
+          <h3>DSA from First Principles</h3>
+
+          <p>
+            Understand data structures, algorithms, computational
+            complexity and problem solving from the ground up.
+          </p>
+
+          <a class="read-link"
+             href="DSA%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+
+        <article class="book-card"
+          data-category="programming"
+          data-search="go golang programming concurrency goroutines channels">
+
+          <div class="book-code">GO</div>
+          <div class="book-category">Programming Languages</div>
+
+          <h3>Go from First Principles</h3>
+
+          <p>
+            Explore Go programming, concurrency, goroutines,
+            channels, memory management and system development.
+          </p>
+
+          <a class="read-link"
+             href="Go%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+
+        <article class="book-card"
+          data-category="systems"
+          data-search="kubernetes containers orchestration docker eks cloud native">
+
+          <div class="book-code">K8S</div>
+          <div class="book-category">Cloud Native Systems</div>
+
+          <h3>Kubernetes from First Principles</h3>
+
+          <p>
+            Understand containers, orchestration, Kubernetes
+            architecture, networking, storage and operations.
+          </p>
+
+          <a class="read-link"
+             href="Kubernetes%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+
+        <article class="book-card"
+          data-category="networking"
+          data-search="networking tcp ip osi dns http routing switching protocols">
+
+          <div class="book-code">NET</div>
+          <div class="book-category">Computer Networks</div>
+
+          <h3>Networking from First Principles</h3>
+
+          <p>
+            Explore networking fundamentals, TCP/IP, routing,
+            switching, DNS, HTTP and network architecture.
+          </p>
+
+          <a class="read-link"
+             href="Networking%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+
+        <article class="book-card"
+          data-category="programming"
+          data-search="rust programming language ownership borrowing lifetimes memory safety">
+
+          <div class="book-code">RUST</div>
+          <div class="book-category">Programming Languages</div>
+
+          <h3>Rust from First Principles</h3>
+
+          <p>
+            Learn ownership, borrowing, lifetimes, memory safety
+            and systems programming with Rust.
+          </p>
+
+          <a class="read-link"
+             href="Rust%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+
+        <article class="book-card"
+          data-category="security"
+          data-search="security cybersecurity cryptography authentication authorization zero trust">
+
+          <div class="book-code">SEC</div>
+          <div class="book-category">Cybersecurity</div>
+
+          <h3>Security from First Principles</h3>
+
+          <p>
+            Explore security fundamentals, cryptography,
+            authentication, authorization, threats and
+            defensive architecture.
+          </p>
+
+          <a class="read-link"
+             href="Security%20from%20First%20Principles.html">
+            Read book <span>→</span>
+          </a>
+
+        </article>
+
+      </div>
+
+      <div class="no-results" id="noResults">
+        <h3>No books found</h3>
+        <p>Try another search term or category.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+
+  <footer>
+    <div class="container">
+      <p>
+        <strong>The First Principles Library</strong>
+      </p>
+      <p style="margin-top: 6px;">
+        A personal knowledge collection · Built for lifelong learning
+      </p>
+    </div>
+  </footer>
+
+  <!-- Search and Filter Logic -->
+
+  <script>
+    const searchInput = document.getElementById("searchInput");
+    const cards = [...document.querySelectorAll(".book-card")];
+    const filters = document.querySelectorAll(".filter");
+    const bookCount = document.getElementById("bookCount");
+    const noResults = document.getElementById("noResults");
+
+    let activeCategory = "all";
+
+    function updateBooks() {
+      const query = searchInput.value.toLowerCase().trim();
+      let visible = 0;
+
+      cards.forEach(card => {
+        const category = card.dataset.category;
+        const searchText = (
+          card.innerText + " " + card.dataset.search
+        ).toLowerCase();
+
+        const matchesCategory =
+          activeCategory === "all" ||
+          category === activeCategory;
+
+        const matchesSearch =
+          searchText.includes(query);
+
+        const show = matchesCategory && matchesSearch;
+
+        card.style.display = show ? "flex" : "none";
+
+        if (show) visible++;
+      });
+
+      bookCount.textContent =
+        `${visible} ${visible === 1 ? "book" : "books"}`;
+
+      noResults.style.display =
+        visible === 0 ? "block" : "none";
+    }
+
+    searchInput.addEventListener("input", updateBooks);
+
+    filters.forEach(button => {
+      button.addEventListener("click", () => {
+        filters.forEach(filter =>
+          filter.classList.remove("active")
+        );
+
+        button.classList.add("active");
+        activeCategory = button.dataset.category;
+
+        updateBooks();
+      });
+    });
+
+    updateBooks();
+  </script>
+
 </body>
 </html>
